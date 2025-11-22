@@ -7,7 +7,7 @@ import GalleryCard from '@/components/ui/GalleryCard.vue'
 import GalleryModal from '@/components/ui/GalleryModal.vue'
 
 const router = useRouter()
-const activeFilter = ref('all')
+const activeFilter = ref('全部模型')
 const selectedItem = ref<any>(null)
 const gallerySearch = ref('')
 
@@ -24,7 +24,7 @@ const GALLERY_ITEMS = Array.from({ length: 24 }).map((_, i) => ({
   prompt: i % 2 === 0 ? "Cyberpunk character, neon lights, high detail, 8k" : "Dreamy forest, magical atmosphere, soft lighting, 8k",
   user: {
     name: `User_${i + 100}`,
-    avatar: "https://public.youware.com/users-website-assets/prod/faf7c4ec-0acf-42c0-b174-678e35ae8c70/93629169d5504c54b49b89961ff3a71d" // Mock avatar
+    avatar: "https://public.youware.com/users-website-assets/prod/faf7c4ec-0acf-42c0-b174-678e35ae8c70/93629169d5504c54b49b89961ff3a71d"
   },
   likes: Math.floor(Math.random() * 1000),
   runs: Math.floor(Math.random() * 5000),
@@ -42,37 +42,46 @@ const filteredItems = computed(() => {
 
 const handleUseTemplate = (item: any) => {
   if (item) {
-    router.push({ 
-      path: '/generate', 
-      state: { 
-        prompt: item.prompt, 
+    router.push({
+      path: '/generate',
+      state: {
+        prompt: item.prompt,
         referenceImage: item.src,
         autoGenerate: true
-      } 
+      }
     })
   }
 }
 
 const handleEditTemplate = (item: any) => {
   if (item) {
-    router.push({ 
-      path: '/generate', 
-      state: { 
-        prompt: item.prompt, 
+    router.push({
+      path: '/generate',
+      state: {
+        prompt: item.prompt,
         referenceImage: item.src,
         autoGenerate: false
-      } 
+      }
     })
   }
+}
+
+const handleFilterChange = (filter: string) => {
+  activeFilter.value = filter
+}
+
+const handleLoadMore = () => {
+  // TODO: 实现加载更多逻辑
+  console.log('加载更多...')
 }
 </script>
 
 <template>
   <div class="min-h-screen bg-bg-page pt-20 pb-12">
-    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 flex gap-8">
-      
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex gap-8" style="max-width: 1600px;">
+
       <!-- Sidebar Filters (Desktop) -->
-      <aside class="w-64 hidden lg:block flex-shrink-0 space-y-8 sticky top-24 h-[calc(100vh-6rem)] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-border-base">
+      <aside class="w-64 hidden lg:block flex-shrink-0 space-y-8 sticky overflow-y-auto scrollbar-thin scrollbar-thumb-border-base" style="top: 6rem; height: calc(100vh - 6rem); padding-right: 0.5rem;">
         <div>
           <h3 class="font-bold text-text-primary mb-4 flex items-center gap-2">
             <SlidersHorizontal class="w-4 h-4" /> 筛选
@@ -83,11 +92,11 @@ const handleEditTemplate = (item: any) => {
               :key="item"
               :class="cn(
                 'w-full text-left px-3 py-2 rounded-base text-sm transition-colors',
-                activeFilter === item 
-                  ? 'bg-primary/10 text-primary font-medium' 
+                activeFilter === item
+                  ? 'bg-primary text-white font-medium'
                   : 'text-text-secondary hover:bg-bg-card hover:text-text-primary'
               )"
-              @click="activeFilter = item"
+              @click="handleFilterChange(item)"
             >
               {{ item }}
             </button>
@@ -105,12 +114,12 @@ const handleEditTemplate = (item: any) => {
 
         <div>
           <h3 class="font-bold text-text-primary mb-4">排序</h3>
-          <select class="w-full bg-bg-card border border-border-base rounded-base px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-primary">
-            <option>热门推荐</option>
-            <option>最新发布</option>
-            <option>最多喜欢</option>
-            <option>最多使用</option>
-          </select>
+          <el-select v-model="activeFilter" placeholder="选择排序方式" style="width: 100%;">
+            <el-option label="热门推荐" value="hot" />
+            <el-option label="最新发布" value="new" />
+            <el-option label="最多喜欢" value="likes" />
+            <el-option label="最多使用" value="runs" />
+          </el-select>
         </div>
       </aside>
 
@@ -118,18 +127,21 @@ const handleEditTemplate = (item: any) => {
       <div class="flex-1">
         <!-- Search & Tags -->
         <div class="mb-8 space-y-4">
-          <div class="relative max-w-2xl">
-            <Search class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-secondary" />
-            <input 
-              type="text" 
+          <div class="max-w-2xl">
+            <el-input
               v-model="gallerySearch"
-              placeholder="搜索模型、图片、灵感..." 
-              class="w-full pl-12 pr-4 py-3 bg-bg-card border border-border-base rounded-full text-text-primary focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 shadow-sm transition-all"
-            />
+              placeholder="搜索模型、图片、灵感..."
+              size="large"
+              class="w-full search-input-round"
+            >
+              <template #prefix>
+                <Search class="w-5 h-5 text-text-secondary" />
+              </template>
+            </el-input>
           </div>
           <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
             <span class="text-sm text-text-secondary whitespace-nowrap">热门搜索:</span>
-            <button v-for="tag in ['Cyberpunk', 'Ghibli', 'Portrait', 'Landscape', 'Mecha', 'Watercolor']" :key="tag" class="px-4 py-1.5 rounded-full bg-bg-card/50 border border-border-base text-sm text-text-secondary hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-all whitespace-nowrap">
+            <button v-for="tag in ['Cyberpunk', 'Ghibli', 'Portrait', 'Landscape', 'Mecha', 'Watercolor']" :key="tag" class="px-4 py-1.5 rounded-full bg-bg-card border border-border-base text-sm text-text-secondary hover:bg-primary hover:text-white hover:border-primary transition-all whitespace-nowrap" style="flex-shrink: 0;">
               {{ tag }}
             </button>
           </div>
@@ -146,12 +158,12 @@ const handleEditTemplate = (item: any) => {
             @click="selectedItem = item"
           />
         </div>
-        
+
         <!-- Load More -->
         <div class="mt-12 text-center">
-          <button class="el-button el-button-default px-8 py-3 rounded-full bg-bg-card border-border-base hover:border-primary hover:text-primary">
+          <el-button @click="handleLoadMore" class="rounded-full px-8 py-3">
             加载更多
-          </button>
+          </el-button>
         </div>
       </div>
     </div>
@@ -166,3 +178,11 @@ const handleEditTemplate = (item: any) => {
     />
   </div>
 </template>
+
+<style scoped>
+/* 确保横向滚动正常工作 */
+.scrollbar-hide {
+  display: flex;
+  flex-wrap: nowrap;
+}
+</style>

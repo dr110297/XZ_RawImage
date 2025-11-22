@@ -37,10 +37,10 @@ const STYLES = [
 ]
 
 const ASPECT_RATIOS = [
-  { label: '1:1', value: '1:1', icon: 'Square' },
-  { label: '16:9', value: '16:9', icon: 'Landscape' },
-  { label: '9:16', value: '9:16', icon: 'Portrait' },
-  { label: '4:3', value: '4:3', icon: 'Classic' },
+  { label: '1:1', value: '1:1'},
+  { label: '16:9', value: '16:9'},
+  { label: '9:16', value: '9:16'},
+  { label: '4:3', value: '4:3'},
 ]
 
 // Types
@@ -131,32 +131,6 @@ const HISTORY_SESSIONS: HistorySession[] = [
       }
     ]
   },
-  ...Array.from({ length: 10 }).map((_, i) => ({
-    id: `session_mock_${i}`,
-    date: new Date(Date.now() - (i + 4) * 86400000).toISOString(),
-    firstPrompt: `历史会话示例 ${i + 1}: 这是一个自动生成的测试会话，用于展示历史记录列表的滚动效果。`,
-    firstImage: [
-      "https://public.youware.com/users-website-assets/prod/faf7c4ec-0acf-42c0-b174-678e35ae8c70/93629169d5504c54b49b89961ff3a71d",
-      "https://public.youware.com/users-website-assets/prod/faf7c4ec-0acf-42c0-b174-678e35ae8c70/2dd2239d444142d3afc0fb2db153df7b",
-      "https://public.youware.com/users-website-assets/prod/faf7c4ec-0acf-42c0-b174-678e35ae8c70/00bdd1645172419eb35df7fa3dd99321",
-      "https://public.youware.com/users-website-assets/prod/faf7c4ec-0acf-42c0-b174-678e35ae8c70/c19331b743f442838b6dd7026c17ae0f"
-    ][i % 4],
-    totalImages: Math.floor(Math.random() * 8) + 1,
-    messages: [
-      {
-        id: `msg_mock_${i}_1`,
-        role: 'user' as const,
-        content: `历史会话示例 ${i + 1}: 这是一个自动生成的测试会话，用于展示历史记录列表的滚动效果。`
-      },
-      {
-        id: `msg_mock_${i}_2`,
-        role: 'assistant' as const,
-        images: [
-          "https://public.youware.com/users-website-assets/prod/faf7c4ec-0acf-42c0-b174-678e35ae8c70/93629169d5504c54b49b89961ff3a71d"
-        ]
-      }
-    ]
-  }))
 ]
 
 const GALLERY_ITEMS = Array.from({ length: 30 }).map((_, i) => ({
@@ -671,21 +645,22 @@ const navigateToGallery = () => {
         <!-- Gallery Tab Content -->
         <div v-if="activeSidebarTab === 'gallery'" class="space-y-4">
           <!-- Search & Filter -->
-          <div class="relative">
-            <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary" />
-            <input 
-              type="text" 
-              placeholder="搜索画廊..." 
-              v-model="gallerySearch"
-              class="w-full pl-9 pr-3 py-2 bg-bg-page border border-border-base rounded-base text-sm focus:outline-none focus:border-primary"
-            />
-          </div>
+          <el-input
+            v-model="gallerySearch"
+            placeholder="搜索画廊..."
+            class="w-full text-sm"
+          >
+            <template #prefix>
+              <Search class="w-4 h-4 text-text-secondary" />
+            </template>
+          </el-input>
           
-          <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+          <div class="scrollable_flex scrollbar-thin">
             <button
               v-for="cat in ['All', 'Portrait', 'Landscape', 'Sci-Fi', 'Abstract']"
               :key="cat"
               @click="selectedCategory = cat"
+              style="margin-right:8px;"
               :class="cn(
                 'px-3 py-1 rounded-full text-xs border whitespace-nowrap transition-colors',
                 selectedCategory === cat
@@ -723,15 +698,15 @@ const navigateToGallery = () => {
 
         <!-- History Tab Content -->
         <div v-if="activeSidebarTab === 'history'" class="space-y-4">
-          <div class="relative">
-            <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary" />
-            <input 
-              type="text" 
-              placeholder="搜索日期或内容..." 
-              v-model="historySearch"
-              class="w-full pl-9 pr-3 py-2 bg-bg-page border border-border-base rounded-base text-sm focus:outline-none focus:border-primary"
-            />
-          </div>
+          <el-input
+            v-model="historySearch"
+            placeholder="搜索内容..."
+            class="w-full text-sm"
+          >
+            <template #prefix>
+              <Search class="w-4 h-4 text-text-secondary" />
+            </template>
+          </el-input>
 
           <div class="space-y-4">
             <div 
@@ -813,3 +788,11 @@ const navigateToGallery = () => {
     />
   </div>
 </template>
+<style scoped>
+.scrollable_flex {
+  display: flex;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+</style>
+

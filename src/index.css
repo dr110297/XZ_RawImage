@@ -12,7 +12,4 @@
   .el-button-default {
     @apply bg-white text-text-primary border-border-base hover:text-primary hover:border-primary;
   }
-  .el-input {
-    @apply w-full px-3 py-2 bg-bg-base border border-border-base rounded-base text-text-primary placeholder-text-placeholder focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all;
-  }
 }

@@ -39,18 +39,19 @@ const isMenuOpen = ref(false)
 
           <!-- Auth Buttons -->
           <div class="hidden md:flex items-center gap-4">
-            <RouterLink 
-              to="/login" 
+            <RouterLink
+              to="/login"
               class="text-sm font-medium text-text-secondary hover:text-primary transition-colors"
             >
               登录
             </RouterLink>
-            <RouterLink 
-              to="/register" 
-              class="el-button el-button-primary rounded-full px-4 py-2"
+            <el-button
+              type="primary"
+              class="rounded-full px-4 py-2"
+              @click="$router.push('/register')"
             >
               注册
-            </RouterLink>
+            </el-button>
           </div>
 
           <!-- Mobile Menu Button -->

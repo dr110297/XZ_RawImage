@@ -1,6 +1,53 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
+import { ref } from 'vue'
+import { RouterLink, useRouter } from 'vue-router'
 import { Phone } from 'lucide-vue-next'
+import { ElMessage } from 'element-plus'
+
+const router = useRouter()
+
+// 表单数据
+const loginForm = ref({
+  username: '',
+  password: ''
+})
+
+// 加载状态
+const loading = ref(false)
+
+// 登录方法
+const handleLogin = async () => {
+  if (!loginForm.value.username) {
+    ElMessage.warning('请输入手机号或用户名')
+    return
+  }
+  if (!loginForm.value.password) {
+    ElMessage.warning('请输入密码')
+    return
+  }
+
+  loading.value = true
+
+  try {
+    // TODO: 这里应该调用后端API进行登录验证
+    // const response = await loginAPI(loginForm.value)
+
+    // 模拟登录延迟
+    await new Promise(resolve => setTimeout(resolve, 1000))
+
+    ElMessage.success('登录成功')
+    router.push('/generate')
+  } catch (error) {
+    ElMessage.error('登录失败，请检查用户名和密码')
+  } finally {
+    loading.value = false
+  }
+}
+
+// 忘记密码方法
+const handleForgotPassword = () => {
+  ElMessage.info('忘记密码功能开发中...')
+}
 </script>
 
 <template>
@@ -10,40 +57,64 @@ import { Phone } from 'lucide-vue-next'
       <p class="text-text-secondary">输入您的详细信息以访问您的帐户</p>
     </div>
 
-    <form class="space-y-4">
+    <form class="space-y-4" @submit.prevent="handleLogin">
       <div>
         <label class="block text-sm font-medium text-text-secondary mb-1">手机号 / 用户名</label>
-        <div class="relative">
-          <Phone class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-placeholder" />
-          <input 
-            type="text" 
-            class="w-full bg-white border border-border-base rounded-lg py-3 pl-10 pr-4 text-text-primary placeholder-text-placeholder focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors shadow-sm"
-            placeholder="请输入手机号或用户名"
-          />
-        </div>
+        <el-input
+          v-model="loginForm.username"
+          type="text"
+          placeholder="请输入手机号或用户名"
+          size="large"
+        >
+          <template #prefix>
+            <Phone class="w-5 h-5 text-text-placeholder" />
+          </template>
+        </el-input>
       </div>
       <div>
         <div class="flex items-center justify-between mb-1">
           <label class="block text-sm font-medium text-text-secondary">密码</label>
-          <RouterLink to="#" class="text-sm text-primary hover:text-primary-hover">忘记密码？</RouterLink>
+          <a
+            href="javascript:void(0)"
+            @click="handleForgotPassword"
+            class="text-sm text-primary transition-colors"
+            style="cursor: pointer;"
+          >
+            忘记密码？
+          </a>
         </div>
-        <input 
-          type="password" 
-          class="w-full bg-white border border-border-base rounded-lg py-3 px-4 text-text-primary placeholder-text-placeholder focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors shadow-sm"
+        <el-input
+          v-model="loginForm.password"
+          type="password"
           placeholder="••••••••"
+          size="large"
+          show-password
         />
       </div>
 
-      <button class="w-full bg-primary text-white font-bold py-3 rounded-lg hover:bg-primary-hover transition-colors shadow-md">
-        登录
-      </button>
+      <el-button
+        type="primary"
+        class="w-full"
+        size="large"
+        :loading="loading"
+        :disabled="loading"
+        native-type="submit"
+      >
+        {{ loading ? '登录中...' : '登录' }}
+      </el-button>
     </form>
 
     <p class="mt-8 text-center text-sm text-text-secondary">
-      还没有帐户？{' '}
-      <RouterLink to="/register" class="text-primary hover:text-primary-hover font-medium">
+      还没有帐户？
+      <RouterLink to="/register" class="text-primary font-medium transition-colors" style="margin-left: 0.25rem;">
         注册
       </RouterLink>
     </p>
   </div>
 </template>
+
+<style scoped>
+a:hover {
+  color: var(--color-primary-hover);
+}
+</style>

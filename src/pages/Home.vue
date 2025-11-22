@@ -57,87 +57,103 @@ const showcaseImages = [
 
 const handleQuickGenerate = (item: any) => {
   if (item) {
-    router.push({ 
-      path: '/generate', 
-      state: { 
-        prompt: item.prompt, 
+    router.push({
+      path: '/generate',
+      state: {
+        prompt: item.prompt,
         autoGenerate: true,
-        referenceImage: item.src 
-      } 
+        referenceImage: item.src
+      }
     })
   }
 }
 
 const handleEditTemplate = (item: any) => {
   if (item) {
-    router.push({ 
-      path: '/generate', 
-      state: { 
-        prompt: item.prompt, 
+    router.push({
+      path: '/generate',
+      state: {
+        prompt: item.prompt,
         autoGenerate: false,
         referenceImage: item.src
-      } 
+      }
     })
   }
+}
+
+const navigateToGenerate = () => {
+  router.push('/generate')
+}
+
+const navigateToGallery = () => {
+  router.push('/gallery')
 }
 </script>
 
 <template>
   <div class="flex flex-col min-h-screen bg-bg-page">
     <!-- Hero Section -->
-    <section class="relative pt-32 pb-20 overflow-hidden bg-white">
-      <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-white to-white" />
-      
+    <section class="relative overflow-hidden bg-white" style="padding-top: 8rem; padding-bottom: 5rem;">
+      <div class="absolute inset-0" style="background: radial-gradient(ellipse at top, rgba(37, 99, 235, 0.05), #ffffff, #ffffff);" />
+
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="text-center max-w-3xl mx-auto">
-          <h1 
-            class="text-5xl md:text-7xl font-bold tracking-tight mb-8 text-text-primary animate-in fade-in slide-in-from-bottom-4 duration-700"
+          <h1
+            class="font-bold tracking-tight mb-8 text-text-primary"
+            style="font-size: 3rem; line-height: 1; animation: fadeIn 0.7s ease-out;"
           >
             <span class="text-primary">小智时代</span>专为跨境而生
           </h1>
-          <p 
-            class="text-xl text-text-secondary mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100"
+          <p
+            class="text-xl text-text-secondary mb-8"
+            style="animation: fadeIn 0.7s ease-out 0.1s both;"
           >
             瞬间将您的想法变为现实。为创作者、设计师和梦想家打造的最先进的AI图像生成器。
           </p>
-          <div 
-            class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200"
+          <div
+            class="flex flex-col sm:flex-row items-center justify-center gap-4"
+            style="animation: fadeIn 0.7s ease-out 0.2s both;"
           >
-            <RouterLink 
-              to="/generate" 
-              class="el-button el-button-primary rounded-full px-8 py-4 text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all flex items-center"
+            <el-button
+              type="primary"
+              @click="navigateToGenerate"
+              class="rounded-full px-8 py-4 text-lg shadow-lg flex items-center"
+              style="box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);"
             >
               开始创作 <ArrowRight class="w-5 h-5 ml-2" />
-            </RouterLink>
-            <RouterLink 
-              to="/gallery" 
-              class="el-button el-button-default rounded-full px-8 py-4 text-lg hover:bg-gray-50"
+            </el-button>
+            <el-button
+              @click="navigateToGallery"
+              class="rounded-full px-8 py-4 text-lg"
             >
               浏览画廊
-            </RouterLink>
+            </el-button>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Template Showcase Section -->
-    <section class="py-16 bg-bg-page">
+    <section class="bg-bg-page" style="padding-top: 4rem; padding-bottom: 4rem;">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between mb-8">
           <h2 class="text-2xl font-bold text-text-primary">热门模板</h2>
-          <RouterLink to="/gallery" class="text-primary hover:text-primary-hover font-medium flex items-center gap-1">
+          <el-button
+            text
+            @click="navigateToGallery"
+            class="text-primary font-medium flex items-center gap-1"
+          >
             浏览更多 <ArrowRight class="w-4 h-4" />
-          </RouterLink>
+          </el-button>
         </div>
-        
+
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
           <GalleryCard
             v-for="(item, i) in showcaseImages"
             :key="i"
             :item="item"
             aspect-ratio="aspect-[2/3]"
-            class="animate-in fade-in zoom-in-95 duration-500"
-            :style="{ animationDelay: `${i * 100}ms` }"
+            :style="{ animation: `fadeIn 0.5s ease-out ${i * 0.1}s both` }"
             @click="selectedTemplate = item"
           >
             <template #info>
@@ -152,7 +168,7 @@ const handleEditTemplate = (item: any) => {
     </section>
 
     <!-- Features Section -->
-    <section class="py-24 bg-white relative">
+    <section class="bg-white relative" style="padding-top: 6rem; padding-bottom: 6rem;">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="text-center mb-16">
           <h2 class="text-3xl md:text-4xl font-bold text-text-primary mb-4">为什么选择 xzTimes？</h2>
@@ -160,22 +176,22 @@ const handleEditTemplate = (item: any) => {
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div class="p-8 rounded-base bg-bg-page border border-border-base shadow-sm hover:shadow-md transition-all duration-300 group">
-            <div class="w-12 h-12 rounded-base bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+          <div class="p-8 rounded-base bg-bg-page border border-border-base shadow-sm transition-all hover-feature-card">
+            <div class="w-12 h-12 rounded-base bg-primary flex items-center justify-center mb-6 feature-icon-bg">
               <Zap class="w-6 h-6 text-primary" />
             </div>
             <h3 class="text-xl font-bold text-text-primary mb-3">闪电般的速度</h3>
             <p class="text-text-secondary">利用我们优化的基础设施在几秒钟内生成高质量图像。</p>
           </div>
-          <div class="p-8 rounded-base bg-bg-page border border-border-base shadow-sm hover:shadow-md transition-all duration-300 group">
-            <div class="w-12 h-12 rounded-base bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+          <div class="p-8 rounded-base bg-bg-page border border-border-base shadow-sm transition-all hover-feature-card">
+            <div class="w-12 h-12 rounded-base bg-primary flex items-center justify-center mb-6 feature-icon-bg">
               <ImageIcon class="w-6 h-6 text-primary" />
             </div>
             <h3 class="text-xl font-bold text-text-primary mb-3">高分辨率</h3>
             <p class="text-text-secondary">支持高达4K分辨率的下载，适用于打印和专业用途。</p>
           </div>
-          <div class="p-8 rounded-base bg-bg-page border border-border-base shadow-sm hover:shadow-md transition-all duration-300 group">
-            <div class="w-12 h-12 rounded-base bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+          <div class="p-8 rounded-base bg-bg-page border border-border-base shadow-sm transition-all hover-feature-card">
+            <div class="w-12 h-12 rounded-base bg-primary flex items-center justify-center mb-6 feature-icon-bg">
               <Share2 class="w-6 h-6 text-primary" />
             </div>
             <h3 class="text-xl font-bold text-text-primary mb-3">轻松分享</h3>
@@ -195,3 +211,35 @@ const handleEditTemplate = (item: any) => {
     />
   </div>
 </template>
+
+<style scoped>
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.feature-icon-bg {
+  background-color: rgba(37, 99, 235, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.hover-feature-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.hover-feature-card:hover .feature-icon-bg {
+  background-color: rgba(37, 99, 235, 0.2);
+}
+
+@media (min-width: 768px) {
+  h1 {
+    font-size: 4.5rem !important;
+  }
+}
+</style>

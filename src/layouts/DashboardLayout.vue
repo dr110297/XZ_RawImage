@@ -84,7 +84,7 @@ const navItems = [
     </div>
 
     <!-- Main Content -->
-    <main class="flex-1 pt-16 md:pt-0 overflow-auto bg-bg-page relative">
+    <main class="flex-1 md:pt-0 overflow-auto bg-bg-page relative">
       <!-- Ambient Background -->
       <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent pointer-events-none" />
       <div class="relative z-10 h-full">
